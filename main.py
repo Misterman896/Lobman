@@ -10,31 +10,6 @@ if __name__ == "__main__":
         sys.exit(1)
 
     command = sys.argv[1]
-    match command:
-        case "install":
-            url = sys.argv[2] if len(sys.argv) > 2 else None
-            if not url:
-                print("Please specify a URL for the package to install.")
-                sys.exit(1)
-            else:
-                # fetch the package from the github repository and install it packages must have a pachage.lml file
-                print(f"Installing package from url: {url}")
-                response = requests.get(f"{url}/package.lml")
-                if response.status_code == 200:
-                    package_info = response.text
-                    # check if the package.lml file contains the required fields
-                    package_name = sys.argv[3] if len(sys.argv) > 3 else None
-                    if "name" in package_info and "version" in package_info:
-                        # create a directory for the package
-                        os.makedirs(f"packages/{package_name}", exist_ok=True)
-                        # write the package.lml file to the package directory
-                        with open(f"packages/{package_name}/package.lml", "w") as f:
-                            f.write(package_info)
-                        print(f"Package {package_name} installed successfully.")
-                    else:
-                        print(f"Package {package_name} is missing required fields in package.lml.")
-                        sys.exit(1)
-
     # Handle different commands
     if command == "install":
         url = sys.argv[2] if len(sys.argv) > 2 else None
@@ -65,8 +40,8 @@ if __name__ == "__main__":
                     sys.exit(1)
                 else:
                     # create a new package directory with a package.lml file
-                    os.makedirs(f"packages/{package_name}", exist_ok=True)
-                    with open(f"packages/{package_name}/package.lml", "w") as f:
+                    os.makedirs(f"{package_name}", exist_ok=True)
+                    with open(f"{package_name}/package.lml", "w") as f:
                         f.write(f"name: {package_name}\nversion: 0.1.0\ndescription: A new Lobster package\n")
                     print(f"New package {package_name} created successfully.")
             case "project":
